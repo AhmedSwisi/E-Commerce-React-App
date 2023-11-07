@@ -28,8 +28,8 @@ const SignUpPage = () =>{
         <div>
             <ThemeProvider theme = {theme}>
             <form  onSubmit={handleSignUp}>
-                <Grid container direction="column" alignContent="center" spacing={2} justifyContent="center"  >
-                    <Grid item display="flex" justifyContent="center" alignItems="center">
+                <Grid container direction="column" alignContent="center" spacing={2} justifyContent="center" paddingTop={"64px"} paddingBottom={"96px"}  >
+                    <Grid item display="flex" justifyContent="center" alignItems="center" >
                     <Typography variant="h3" component="h3">
                     Sign Up
                     </Typography>

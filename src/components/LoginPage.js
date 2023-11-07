@@ -24,26 +24,35 @@ const LoginPage = () => {
         <div>
         <ThemeProvider theme = {theme}>
         <form  onSubmit={handleSignIn}>
-            <Grid container direction="column" alignContent="center" spacing={2} justifyContent="center"  >
-                <Grid item display="flex" justifyContent="center" alignItems="center">
+            <Grid container direction="column" alignContent="center" spacing={0} justifyContent="center" paddingTop={"64px"} paddingBottom={"96px"}  >
+                <Grid item display="flex" justifyContent="center" alignItems="center" padding={"0px, 0px, 0px, 0px"} paddingBottom={"32px"}>
                 <Typography variant="h3" component="h3">
                 Log In
                 </Typography>
                 </Grid>
-                <Grid item>
-                    <InputLabel>
-                        Email*
-                    </InputLabel>
+                <Grid item paddingBottom={"24px"}>
+                    <Grid item paddingBottom={"8px"}>
+                        <InputLabel >
+                            Email*
+                        </InputLabel>
+                    </Grid>
                     <TextField  id="email" value = {email} fullWidth  variant="outlined" onChange={e => setEmail(e.target.value)}/>
                 </Grid>
-                <Grid item>
-                    <InputLabel sx={{color:"black"}} >
-                        Password*
-                    </InputLabel>
+                <Grid item paddingBottom={"24px"} >
+                    <Grid item paddingBottom={"8px"}>
+                        <InputLabel sx={{color:"black"}}  >
+                            Password*
+                        </InputLabel>
+                    </Grid>
                     <TextField  id="password" value = {password} fullWidth  variant="outlined" onChange={e => setPassword(e.target.value)} />
                 </Grid>
-                <Grid item display="flex" justifyContent="center" alignItems="center" xs={9}>
+                <Grid item display="flex" justifyContent="center" alignItems="center" xs={9} paddingBottom={"24px"}>
                     <Button variant="contained" type="submit" fullWidth sx={{width:480}} >Log In</Button>
+                </Grid>
+                <Grid item display="flex" justifyContent="center" alignItems="center">
+                    <Typography variant="body1">
+                        Forgot your password?
+                    </Typography>
                 </Grid>
             </Grid>
         </form>
