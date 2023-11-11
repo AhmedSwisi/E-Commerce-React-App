@@ -2,6 +2,7 @@ import React from "react";
 import SignUpPage from "../components/SignUpPage";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import AuthRoute from "../components/AuthRoute";
+import ProductPage from "../components/ProductPage";
 import LoginPage from "../components/LoginPage";
 import Home from "../components/Home";
 import AuthDetails from "../components/AuthDetails";
@@ -20,6 +21,7 @@ const AppRouter = () => (
                 <Route path = "/signup" element = {<SignUpPage />}/>
                 <Route path = "/login" element = {<LoginPage />}/>
                 <Route path = "/test" element = {<AuthDetails />}/>
+                <Route path = '/product' element ={<ProductPage />}/>
                 <Route path = '*' element ={<NotFoundPage />}/>
             </Routes> 
         </ThemeProvider>
