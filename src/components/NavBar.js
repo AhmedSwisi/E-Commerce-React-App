@@ -1,7 +1,6 @@
 import React from "react";
-import { AppBar, Typography, Box, Toolbar  } from "@mui/material";
+import { AppBar, Typography, Box, Toolbar, Link  } from "@mui/material";
 import { HeadphonesRounded, ShoppingBagOutlined, PersonOutlineOutlined} from "@mui/icons-material";
-import {Link} from "@mui/material";
 import SearchBar from "./common/SearchBar";
 import "@fontsource/inter"
 

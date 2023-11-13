@@ -23,6 +23,14 @@ const theme = createTheme({
             fontWeight: '400',
             lineHeight: 'normal'
         },
+        description_header: {
+            color:"black",
+            fontFamily:'Roboto',
+            fontSize:"24px",
+            fontStyle:"normal",
+            fontWeight: "700",
+            lineHeight:"140%"
+        },
         price_text:{
             color:"black",
             textAlign: "left",
@@ -39,6 +47,20 @@ const theme = createTheme({
             fontWeight:"400",
             lineHeight:"150%"
         },
+        footer_link:{
+            fontFamily: 'Roboto',
+            fontSize: "16px",
+            fontStyle:"normal",
+            fontWeight:"600",
+            lineHeight:"150%"
+        },
+        credits:{
+            fontFamily: 'Roboto',
+            fontSize: '14px',
+            fontStyle: 'normal',
+            fontWeight: '400',
+            lineHeight: '150%'
+        },
         product_header:{
             color: "black",
             fontFamily: "Roboto",
@@ -47,8 +69,16 @@ const theme = createTheme({
             fontWeight:700,
             lineHeight:"120%"
         },
+        item_header: {
+            color: "black",
+            fontFamily:"Roboto",
+            fontSize:"20px",
+            fontStyle:"normal",
+            fontWeight:"700",
+            lineHeight:"140%"
+        },
         fontFamily:[
-            'roboto'
+            'Roboto'
         ]
     },
     palette: {
@@ -60,6 +90,24 @@ const theme = createTheme({
         }
     },
     components:{
+        MuiToggleButton: {
+            styleOverrides: {
+                root:{
+                    "&.Mui-selected, &.Mui-selected:hover": {
+                        color: "white",
+                        backgroundColor: 'black'
+                      },
+                    color:"black",
+                    backgroundColor:"white",
+                    fontFamily:'Roboto',
+                    fontSize:'16px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: "150%",
+                    border: "1px solid var(--Black, #000)"
+                    
+            }
+        }},
         MuiButton:{
             styleOverrides:{
                 

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { getDownloadURL, getStorage, ref} from "firebase/storage";
+import React from "react";
 import { Box, Typography, Grid } from "@mui/material";
 import styled from "styled-components";
 import '@fontsource/inter/800.css' 
@@ -90,22 +89,8 @@ const SVGSmallOvalContainer = styled(Box)({
     flexShrink: '0'
 })
 
-//{image ? <img src={image} alt=""/> : "Loading image"}
-const storage = getStorage();
-const getImage = async (location) =>{
-    const  imageUrl = await getDownloadURL(ref(storage, location))
-    return imageUrl
-}
-
 const NotFoundPage = (props) => {
-    const [image, setImage] = useState();
-    useEffect(() => {
-        const fetchImage = async () =>{
-            const image = await getImage('gs://e-commerce-project-60813.appspot.com/404 picture.png')
-        setImage(image);
-        }
-        fetchImage()
-    }, [])
+    
     return(
         <Grid container direction="column" alignContent="center" spacing={1} justifyContent={"center"}>
             <Grid item>
