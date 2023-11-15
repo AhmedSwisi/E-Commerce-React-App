@@ -31,6 +31,14 @@ const theme = createTheme({
             fontWeight: "700",
             lineHeight:"140%"
         },
+        home_header:{
+            color:"black",
+            fontFamily:'Roboto',
+            fontSize:"96px",
+            fontStyle:"normal",
+            fontWeight:"700",
+            lineHeight:"98%"
+        },
         price_text:{
             color:"black",
             textAlign: "left",
@@ -39,6 +47,16 @@ const theme = createTheme({
             fontStyle: "normal",
             fontWeight: 400,
             lineHeight:"120%"
+        },
+        card_header:{
+            color:"#FFF",
+            textAlign:"center",
+            fontFamily:"Roboto",
+            fontSize:"32px",
+            fontStyle:"normal",
+            fontWeight:800,
+            lineHeight:"104.5%",
+            
         },
         appbar_link:{
             fontFamily:'roboto',

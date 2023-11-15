@@ -15,10 +15,10 @@ const ShopListItem = ({product}) => {
     },)
 
     return(
-        <Grid item>
+        <Grid item >
             <Card elevation={0}>
                 <Box display={"flex"} justifyContent={"flex-start"} flexDirection={"column"} alignItems={"flex-start"} gap={"24px"} flex={"1 0 0"} sx={{height:"457px"}}>
-                    <Box display={"flex"} sx={{height:"300px", width:"250px"} } flexShrink={0} >
+                    <Box display={"flex"} sx={{height:"50%", width:"100%"} } flexShrink={0} >
                         <img style={{width:"100%", height:"100%"}} src={imageUrl} className="picture" alt="loading"></img>
                     </Box>
                     <Box display={"flex"} flexDirection={"column"} gap={"16px"} justifyContent={"flex-start"}>

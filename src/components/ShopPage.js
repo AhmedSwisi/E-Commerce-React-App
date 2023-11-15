@@ -3,6 +3,7 @@ import { Grid, Box, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import { getProducts } from "../firebase/utilities";
 import ShopListItem from "./ShopListItem";
+import ProductList from "./ProductList";
 
 const ShopPage = () => {
 
@@ -40,6 +41,6 @@ const ShopPage = () => {
     )
 }
 
-const ProductList = ({products}) => (products.map((product) => <ShopListItem product = {product} />))
+
 
 export default ShopPage
