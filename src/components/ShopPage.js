@@ -2,7 +2,6 @@
 import { Grid, Box, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import { getProducts } from "../firebase/utilities";
-import ShopListItem from "./ShopListItem";
 import ProductList from "./ProductList";
 
 const ShopPage = () => {

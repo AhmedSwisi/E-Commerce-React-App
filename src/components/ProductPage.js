@@ -7,7 +7,7 @@ import { Grid, Typography, Box, Rating, Button, ToggleButtonGroup, ToggleButton,
 
 const ProductPage = () => {
 
-    
+    const [reviews, setReviews] = useState(['n'])
     const [product, setProduct] = useState({})
     const [image, setImageUrl] = useState('')
     const [rating, setRating] = useState(null)
@@ -29,7 +29,7 @@ const ProductPage = () => {
             const docSnap = await getDoc(productRef)
             const doc = docSnap.data()
             setProduct({...doc})
-            setImageUrl(await getImage(doc.picture))
+            //setImageUrl(await getImage(doc.picture))
             console.log(doc.rating)
             setRating(doc.rating)
         }
@@ -84,12 +84,17 @@ const ProductPage = () => {
                         </ToggleButtonGroup>
                     </Box>
                     <Box display={"flex"} flex={"1 0 0"} gap={"32px"} flexDirection={"column"} justifyContent={"flex-start"} alignContent={"flex-start"} alignItems={"flex-start"} padding={"32px"} alignSelf={"stretch"}>
-                        <Typography variant="description_header">Description</Typography>
+                        {selected === "description" ?(<Typography variant="description_header">Description</Typography>) :(<Typography variant="description_header">Reviews</Typography>)}
+                        
                         <Divider sx={{width:"1216px", height:"1px", color:"black", backgroundColor:"black"} }/>
                         <Box display={"flex"} height={"107px"} alignItems={"flex-start"} alignSelf={"stretch"}>
-                            {selected === "description" ? (
-                                <Typography variant="body1">{product.description}</Typography>
-                            ) : (<Typography variant="body1">No reviews yet</Typography>)}
+                            {selected === "description" && 
+                                 (<Typography variant="body1">{product.description}</Typography>) }
+                            {selected === "reviews" && reviews.length=== 0 
+                            ? (<Typography variant="body1">No reviews yet</Typography>) 
+                            :(<Box display={"flex"}  alignItems={"flex-start"} flex={"1 0 0"} gap={"32px"} sx={{backgroundColor:"#ECECEC", borderRadius:"16px"}}>
+                                <Typography>some text</Typography>
+                                 </Box>)}
                         </Box>
                     </Box>
                       
