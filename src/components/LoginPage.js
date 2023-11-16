@@ -14,7 +14,7 @@ const LoginPage = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (user) navigate("/")
+        //if (user) navigate("/")
     },[user, navigate])
 
     // const handleSignIn = (e) => {

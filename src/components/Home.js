@@ -13,7 +13,7 @@ const Home = () =>{
 
     useEffect(() =>{
         const fetchData = async () => {
-            setProducts(await getProducts())
+            //setProducts(await getProducts())
             setHeaderImageUrl(await getImage('gs://e-commerce-project-60813.appspot.com/Header Tab.png'))
             setHeadphonesImageUrl(await getImage('gs://e-commerce-project-60813.appspot.com/Headphones tab.png'))
             setWatchImageUrl(await getImage('gs://e-commerce-project-60813.appspot.com/Watches Tab.png'))

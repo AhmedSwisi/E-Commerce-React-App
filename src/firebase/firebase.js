@@ -60,7 +60,7 @@ export const registerWithEmailAndPassword = async (name, email, password) =>{
       uid: user.uid,
       name,
       authProvider:"local",
-      email
+      email,
     })
   } catch (error) {
       console.error(error)

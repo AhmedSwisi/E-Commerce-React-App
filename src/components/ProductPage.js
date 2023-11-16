@@ -30,7 +30,6 @@ const ProductPage = () => {
             const doc = docSnap.data()
             setProduct({...doc})
             //setImageUrl(await getImage(doc.picture))
-            console.log(doc.rating)
             setRating(doc.rating)
         }
 
@@ -38,20 +37,20 @@ const ProductPage = () => {
     },)
 
     return(
-        <Grid container direction={"flex"} flexDirection={"column"} spacing={10}  paddingTop={"112px"} paddingBottom={"112px"} paddingRight={"80px"} paddingLeft={"80px"}>
+        <Grid container direction={"column"} flexDirection={"column"} spacing={10}  paddingTop={"112px"} paddingBottom={"112px"} paddingRight={"80px"} paddingLeft={"80px"}>
             <Grid item >
                 <Box display={"flex"} direction = {"row"} gap={"80px"}>
                     <Box display={"flex"} flexDirection={"column"}  width={"526px"} height={"640px"}>
                         <img src={image} alt="Loading" className="profile" />
                         <Box display={"flex"} flexDirection={"row"} gap={"24px"} paddingTop={"24px"}>
                                 <Box width={"100px"} height={"100px"}>
-                                <img style={{width:"100%", height:"100%"}} src={image} alt="Loading" className="profile" ob/>
+                                <img style={{width:"100%", height:"100%"}} src={image} alt="Loading" className="profile" />
                                 </Box>
                                 <Box width={"100px"} height={"100px"}>
-                                <img style={{width:"100%", height:"100%"}} src={image} alt="Loading" className="profile" ob/>
+                                <img style={{width:"100%", height:"100%"}} src={image} alt="Loading" className="profile" />
                                 </Box>
                                 <Box width={"100px"} height={"100px"}>
-                                <img style={{width:"100%", height:"100%"}} src={image} alt="Loading" className="profile" ob/>
+                                <img style={{width:"100%", height:"100%"}} src={image} alt="Loading" className="profile" />
                                 </Box>
                         </Box>
                     </Box>
@@ -93,8 +92,8 @@ const ProductPage = () => {
                             {selected === "reviews" && reviews.length=== 0 
                             ? (<Typography variant="body1">No reviews yet</Typography>) 
                             :(<Box display={"flex"}  alignItems={"flex-start"} flex={"1 0 0"} gap={"32px"} sx={{backgroundColor:"#ECECEC", borderRadius:"16px"}}>
-                                <Typography>some text</Typography>
-                                 </Box>)}
+                                
+                            </Box>)}
                         </Box>
                     </Box>
                       
