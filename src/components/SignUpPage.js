@@ -24,7 +24,7 @@ const SignUpPage = () =>{
 
     useEffect(() => {
         if (loading) return;
-        if (user) navigate("/")
+        //if (user) navigate("/")
     }, [user, loading, navigate])
 
     // const handleSignUp = (e) => {

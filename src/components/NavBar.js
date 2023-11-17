@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { AppBar, Typography, Box, Toolbar, Link, Popover, IconButton } from "@mui/material";
 import {auth, logOut} from "../firebase/firebase";
+import { useNavigate } from "react-router-dom";
 import { HeadphonesRounded, ShoppingBagOutlined, PersonOutlineOutlined, VerifiedUserOutlined} from "@mui/icons-material";
 import SearchBar from "./common/SearchBar";
 import "@fontsource/inter"
@@ -14,13 +15,25 @@ const NavBar  = () => {
     const [user, loading] = useAuthState(auth)
     const [authState, setAuthState] = useState("unauthenticated")
     const [anchorEl, setAnchorEl] = useState(null);
+    const navigate = useNavigate()
 
-    const handleIconClick = (event) =>{
+    const handleUserIconClick = (event) =>{
         setAnchorEl(event.currentTarget)
+    }
+
+    const handleBagIconClick = () => {
+        if (user) navigate("/cart")
+        if (!user) navigate ("/login")
     }
 
     const handleIconClose = () => {
         setAnchorEl(null)
+    }
+
+    const handleLogOut = () => {
+        logOut()
+        navigate("/login")
+        
     }
 
     const open = Boolean(anchorEl)
@@ -57,10 +70,12 @@ const NavBar  = () => {
                             </Box>
                             <Box display={"flex"}  gap = {"24px"} alignItems={"center"} justifyContent={"flex-end"} sx={{width:483}} >
                                 <SearchBar />
-                                <ShoppingBagOutlined />
                                 {authState === "unauthenticated" 
                                 ? (<>
-                                    <IconButton onClick={handleIconClick}>
+                                    <IconButton color="primary" onClick={handleBagIconClick}>
+                                        <ShoppingBagOutlined />
+                                    </IconButton>
+                                    <IconButton color="primary" onClick={handleUserIconClick}>
                                         <PersonOutlineOutlined />
                                     </IconButton>
                                     <Popover
@@ -82,7 +97,10 @@ const NavBar  = () => {
                                  
                                 : (
                                 <>
-                                <IconButton onClick={handleIconClick}>
+                                <IconButton color="primary" onClick={handleBagIconClick}>
+                                        <ShoppingBagOutlined />
+                                    </IconButton>
+                                <IconButton color="primary"  onClick={handleUserIconClick}>
                                     <VerifiedUserOutlined />
                                 </IconButton>
                                 <Popover
@@ -97,7 +115,7 @@ const NavBar  = () => {
                                 >
                                     <Box display={"flex"} flexDirection={"column"} sx={{width:"224px", borderRadius:"4px", border:"1px solid rgba(0, 0, 0, 0.50)"}} padding={"16px"} alignItems={"flex-start"} gap={"32px"}>
                                         <Link variant="appbar_link" href = "/cart">Manage Orders</Link>
-                                        <Link component={"button"} onClick = {logOut} variant="appbar_link" >Log Out</Link>
+                                        <Link component={"button"} onClick = {handleLogOut}  variant="appbar_link" >Log Out</Link>
                                     </Box>
                                 </Popover>
                                 </>
