@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
-import { TextField, Button, Grid, InputLabel, Typography } from "@mui/material";
-import { auth, logInWithEmailAndPassword} from "../firebase/firebase";
+import { TextField, Button, Grid, InputLabel, Typography, Link } from "@mui/material";
+import { auth, logInWithEmailAndPassword, sendPasswordReset} from "../firebase/firebase";
 import {ThemeProvider} from "@mui/material/styles";
 import theme from "../styles/Theme";
 import {useAuthState} from "react-firebase-hooks/auth"
@@ -12,6 +12,10 @@ const LoginPage = () => {
     const [password, setPassword] = useState('')
     const [user, loading, error] = useAuthState(auth)
     const navigate = useNavigate()
+
+    const handlePasswordReset = () => {
+        sendPasswordReset(email)
+    } 
 
     useEffect(() => {
         //if (user) navigate("/")
@@ -56,9 +60,9 @@ const LoginPage = () => {
                     <Button variant="contained" type="submit" fullWidth sx={{width:480}} onClick={() => logInWithEmailAndPassword(email, password)} >Log In</Button>
                 </Grid>
                 <Grid item display="flex" justifyContent="center" alignItems="center">
-                    <Typography variant="body1">
+                    <Link component={"button"} variant="body1" onClick={handlePasswordReset}>
                         Forgot your password?
-                    </Typography>
+                    </Link>
                 </Grid>
             </Grid>
         </ThemeProvider>

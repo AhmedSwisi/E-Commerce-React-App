@@ -63,8 +63,7 @@ export const registerWithEmailAndPassword = async (name, email, password) =>{
       email,
     })
   } catch (error) {
-      console.error(error)
-      alert(error.message);
+      console.error(error.message)
   }
 }
 
@@ -80,4 +79,48 @@ export const sendPasswordReset = async (email) =>{
 
 export const logOut = () => {
   signOut(auth)
+}
+
+export const getAuthenticationErrorMessage = (errorCode) => {
+  switch(errorCode){
+    case "auth/invalid-email":
+      return "Please enter a valid email address"
+    case "auth/claims-too-large":
+      return "The claim provided exceeds the maximum limit of 1000 bytes"
+    case "auth/email-already-exists":
+      return "The email is already registered to an existing user"
+    case "auth/id-token-expired":
+      return "The provided ID token is expired"
+    case "auth/id-token-revoked":
+      return "The ID token has been revoked"
+    case "auth/insufficient-permission":
+      return "Insufficient Permissions"
+    case "auth/internal-error":
+      return "The server could not process the request"
+    case "auth/invalid-argument":
+      return "An invalid argument was provided"
+    case "auth/invalid-claims":
+      return "Custom claim attributes are invalid"
+    case "auth/invalid-continue-uri":
+      return "Continue URL is invalid"
+    case "auth/invalid-creation-time":
+      return "Invalid UTC date"
+    case "auth/invalid-credential":
+      return "Invalid credentials"
+    case "auth/invalid-disabled-field":
+      return "Invalid disabled field"
+    case "auth/invalid-display-name":
+      return "Invalid display name"
+    case "auth/invalid-email-verified":
+      return "Invalid verified property"
+    case "auth/invalid-id-token":
+      return "Invalid token ID"
+    case "auth/invalid-password":
+      return "Invalid password format"
+    case "auth/too-many-requests":
+      return "Maximum request number exceeded"
+    default:
+      return "Register failed Please try again"
+  }
+    
 }

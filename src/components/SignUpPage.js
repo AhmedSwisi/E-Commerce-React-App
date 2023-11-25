@@ -1,28 +1,179 @@
-import React, { useEffect,useState} from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { TextField, Button, Grid, InputLabel, Typography, Link} from "@mui/material";
-import { auth, registerWithEmailAndPassword } from "../firebase/firebase"
+import React, { useEffect,useRef,useState} from "react";
+import { useAuthState, useCreateUserWithEmailAndPassword} from "react-firebase-hooks/auth";
+import { TextField, Button, Grid, InputLabel, Typography, Link, Box, Alert} from "@mui/material";
+import { auth, registerWithEmailAndPassword, getAuthenticationErrorMessage } from "../firebase/firebase"
 import { useNavigate } from "react-router-dom";
-import theme from "../styles/Theme";
-import {ThemeProvider} from "@mui/material/styles";
 
 
 const SignUpPage = () =>{
-
-
+    const initialErrorMessages = {
+        nameMessage:null,
+        emailMessage:null,
+        confirmPasswordMessage:null
+    }
+    const [timer, setTimer] = useState()
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [user, loading, error] = useAuthState(auth)
+    const [whiteSpaceMessage, setWhiteSpaceMessage] = useState(null)
+    const [upperCaseMessage, setUpperCaseMessage] = useState(null)
+    const [lowerCaseMessage, setLowerCaseMessage] = useState(null)
+    const [digitMessage, setDigitMessage] = useState(null)
+    const [symbolMessage, setSymbolMessage] = useState(null)
+    const [lengthMessage, setLengthMessage] = useState(null)
+    const [errorMessages, setErrors] = useState(initialErrorMessages)
+    const [successMessage, setSuccessMessage] = useState(null)
+    //const [user, loading, error,] = useAuthState(auth)
+    const [
+        createUserWithEmailAndPassword,
+        user,
+        loading,
+        error,
+      ] = useCreateUserWithEmailAndPassword(auth);
+    const textFieldForEmailRef = useRef(null)
+    const textFieldForPasswordRef = useRef(null)
+    const textFieldForConfirmPasswordRef = useRef(null)
     const navigate = useNavigate()
 
-    const signUp = () => {
-        if(!name) alert("please enter your name")
-        registerWithEmailAndPassword(name, email, password)
+
+
+    const handleSignUp =  async(e) => {
+        e.preventDefault()  
+        
+        createUserWithEmailAndPassword(email, password)
+        
+        if (user !== undefined) {
+            console.log("lol")
+            setSuccessMessage("welcome!")
+        }
+        // try {
+        //     const user = createUserWithEmailAndPassword(email, password)
+        //     user.then((_) => {  
+        //         console.log("user: ", "123")
+        //     })
+        // }  catch (e) {
+        //     //registerWithEmailAndPassword(name, email, password)    
+        //     setSuccessMessage('yikes')
+        // } 
     }
 
+    const isValidEmail = (email) => {
+        let re =  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        let valid = re.test(email)
+        if(valid === false){
+            setErrors({
+                ...errorMessages,
+                emailMessage:"Please enter a valid mail Address (user@emailprovider.com)"
+            })
+        }
+        else if(valid === true){
+            setErrors({
+                ...errorMessages,
+                emailMessage:null
+            })
+        }
+    }
+
+    const isValidName = (name) => {
+        if (name === ''){
+            setErrors({
+                ...errorMessages,
+                nameMessage:"Name cannot be empty"
+            })
+        }
+        else{
+            setErrors({
+                ...errorMessages,
+                nameMessage:null
+            })
+        }
+    }
+
+    const isValidPassword = (e) => {
+        console.log(e)
+        console.log(errorMessages)
+        const hasWhiteSpace = new RegExp( /^(?=.*\s)/)  
+        const includesUpperCase = new RegExp(/[A-Z]/)
+        const includesLowerCase = /^(?=.*[a-z])/
+        const includesDigit = /^(?=.*[0-9])/
+        const includesSymbol = /[*$@!#%&()^~{}]+/
+        const isValidLength = /^.{8,16}$/
+
+        if (hasWhiteSpace.test(e)){
+            console.log("has white space")
+            console.log(whiteSpaceMessage)
+            setWhiteSpaceMessage("Password must not contain any spaces")
+            console.log(whiteSpaceMessage)
+        } else if(!hasWhiteSpace.test(e)){
+            setWhiteSpaceMessage(null)
+            console.log(whiteSpaceMessage)
+        }
+
+        if (!includesUpperCase.test(e)){
+            setUpperCaseMessage("Password must contain one upper case character")
+        } else if(includesUpperCase.test(e)){
+            setUpperCaseMessage(null)
+        }
+
+        if(!includesLowerCase.test(e)){
+            setLowerCaseMessage("Password must contain one lower case character")
+        } else if(includesLowerCase.test(e)){
+            setLowerCaseMessage(null)
+        }
+
+        if(!includesDigit.test(e)){
+            setDigitMessage("Password must contain one digit")
+        } else if(includesDigit.test(e)){
+            setDigitMessage(null)
+        }
+
+        if (!includesSymbol.test(e)){
+            setSymbolMessage("Passwords must contain one special character or symbol")
+        } else if(includesSymbol.test(e)){
+            setSymbolMessage(null)
+        }
+
+        if(!isValidLength.test(e)){
+            setLengthMessage("Password must be between 8 and 16 characters")
+        } else if(isValidLength.test(e)){
+            setLengthMessage(null)
+        }
+    }
+
+    const samePassword = (e) =>{
+        if (e !== password){
+            setErrors({
+                ...errorMessages,
+                confirmPasswordMessage:"Passwords do not match"
+            })
+        } else{
+            setErrors({
+                ...errorMessages,
+                confirmPasswordMessage:null
+            })
+        }
+    }
+
+    
+
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value)
+        
+    }
+
+    const validateInputs = () => {
+        console.log(errorMessages)
+        isValidEmail(email)
+        console.log(errorMessages)
+        console.log(errorMessages)
+        isValidName(name)
+        console.log(errorMessages)
+    }
+  
+
     useEffect(() => {
+        console.log(error)
         if (loading) return;
         //if (user) navigate("/")
     }, [user, loading, navigate])
@@ -39,43 +190,102 @@ const SignUpPage = () =>{
 
     return(
         <div>
-            <ThemeProvider theme = {theme}>
-                <Grid container direction="column" alignContent="center" spacing={2} justifyContent="center" paddingTop={"64px"} paddingBottom={"96px"}  >
-                    <Grid item display="flex" justifyContent="center" alignItems="center" >
-                    <Typography variant="h3" component="h3">
-                    Sign Up
-                    </Typography>
+            <form onSubmit={handleSignUp}>
+                <Grid >
+                    <Grid container direction="column" alignContent="center" spacing={2} justifyContent="center" paddingTop={"64px"} paddingBottom={"96px"}  >
+                        <Grid item display="flex" justifyContent="center" alignItems="center" >
+                        <Typography variant="h3" component="h3">
+                        Sign Up
+                        </Typography>
+                        </Grid>
+                        <Grid item >
+                            <InputLabel>
+                                Name*
+                            </InputLabel>
+                            {<Typography sx={{color:"red"}}>{errorMessages.nameMessage}</Typography>}
+                            <TextField onBlur={() => isValidName(name)} type="input" id="name" value = {name} fullWidth  variant="outlined" onChange={e => setName(e.target.value)}
+                            inputProps={{
+                                onKeyDown: event => {
+                                    const {key} = event;
+                                    if(key === "Enter"){
+                                        event.preventDefault()
+                                        textFieldForEmailRef.current.focus()
+                                    }
+                                }
+                            }}
+                            />
+                            
+                        </Grid>
+                        <Grid item>
+                            <InputLabel>
+                                Email*
+                            </InputLabel>
+                            {<Typography sx={{color:"red"}}>{errorMessages.emailMessage}</Typography>}
+                            <TextField inputRef={textFieldForEmailRef} id="email" value = {email} type="email" fullWidth  variant="outlined" onChange={handleEmailChange}
+                            inputProps={{
+                                
+                                onKeyDown: event => {
+                                    clearTimeout(timer)
+                                    const tempTimer = setTimeout(() => {
+                                        isValidEmail(email)
+                                    }, 1000)
+                                    setTimer(tempTimer)
+                                    const {key} = event;
+                                    if(key === "Enter"){
+                                        event.preventDefault()
+                                        textFieldForPasswordRef.current.focus()
+                                    }
+                                }
+                            }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <InputLabel sx={{color:"black"}} >
+                                Password*
+                            </InputLabel>
+                            {<Box>
+                                <Typography sx={{color:"red"}}>{whiteSpaceMessage}</Typography>
+                                <Typography sx={{color:"red"}}>{upperCaseMessage}</Typography>
+                                <Typography sx={{color:"red"}}>{lowerCaseMessage}</Typography>
+                                <Typography sx={{color:"red"}}>{digitMessage}</Typography>
+                                <Typography sx={{color:"red"}}>{symbolMessage}</Typography>
+                                <Typography sx={{color:"red"}}>{lengthMessage}</Typography>
+                            </Box>}
+                            <TextField inputRef={textFieldForPasswordRef}  id="password" value = {password} fullWidth  variant="outlined"
+                            onChange={(e) => {setPassword(e.target.value); isValidPassword(e.target.value)}} 
+                            inputProps={{
+                                onKeyDown: event => {
+                                    const {key} = event;
+                                    if(key === "Enter" ){
+                                        event.preventDefault()
+                                        textFieldForConfirmPasswordRef.current.focus()
+                                    }
+                                }
+                            }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <InputLabel>
+                                Confirm Password*
+                            </InputLabel>
+                            {<Typography sx={{color:"red"}}>{errorMessages.confirmPasswordMessage}</Typography>}
+                            <TextField inputRef={textFieldForConfirmPasswordRef}  id="password-confirm" value = {confirmPassword} fullWidth  variant="outlined" 
+                            onChange={(e) => {setConfirmPassword(e.target.value); samePassword(e.target.value)}} />
+                        </Grid>
+                        <Grid item display="flex" justifyContent="center" alignItems="center" xs={9}>
+                            <Button type="submit" variant="contained"fullWidth sx={{width:480}}  >Sign Up</Button>
+                        </Grid>
                     </Grid>
-                    <Grid item >
-                        <InputLabel>
-                            Name*
-                        </InputLabel>
-                        <TextField  id="name" value = {name} fullWidth  variant="outlined" onChange={e => setName(e.target.value)} />
-                        
-                    </Grid>
-                    <Grid item>
-                        <InputLabel>
-                            Email*
-                        </InputLabel>
-                        <TextField  id="email" value = {email} fullWidth  variant="outlined" onChange={e => setEmail(e.target.value)}/>
-                    </Grid>
-                    <Grid item>
-                        <InputLabel sx={{color:"black"}} >
-                            Password*
-                        </InputLabel>
-                        <TextField  id="password" value = {password} fullWidth  variant="outlined" onChange={e => setPassword(e.target.value)} />
-                    </Grid>
-                    <Grid item>
-                        <InputLabel>
-                            Confirm Password*
-                        </InputLabel>
-                        <TextField  id="password-confirm" value = {confirmPassword} fullWidth  variant="outlined" onChange={e => setConfirmPassword(e.target.value)} />
-                    </Grid>
-                    <Grid item display="flex" justifyContent="center" alignItems="center" xs={9}>
-                        <Button variant="contained"fullWidth sx={{width:480}} onClick={signUp} >Sign Up</Button>
+                    <Grid container item direction="column" alignContent="flex-start" spacing={1} justifyContent="center" >
+                        <Grid item>
+                            <Box paddingLeft={"80px"} gap={"30px"}>
+                                {error && successMessage === null ?(<Alert severity="error">{getAuthenticationErrorMessage(error?.code)}</Alert>) :(null)}
+                                {successMessage !==null ?(<Alert severity="success">{successMessage}</Alert>) :(null) }
+                            </Box>
+                        </Grid>
                     </Grid>
                 </Grid>
-            </ThemeProvider>
+            </form>
         </div>
     )
 }
