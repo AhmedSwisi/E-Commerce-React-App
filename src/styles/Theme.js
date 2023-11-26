@@ -205,6 +205,20 @@ const theme = createTheme({
                     height:"72px"
                 }
             }
+        },
+        MuiSlider: {
+            styleOverrides: {
+                root:{
+                    "& .MuiSlider-thumb": {
+                        borderRadius: "0%",
+                        height: 20,
+                        width: 3,
+                      },
+                      "& .MuiSlider-track": {
+                        height:2
+                      }
+                }
+            }
         }
         
 

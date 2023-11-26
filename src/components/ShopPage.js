@@ -1,30 +1,57 @@
 
-import { Grid, Box, Typography} from "@mui/material";
-import React, {useEffect, useState} from "react";
-import { getProducts } from "../firebase/utilities";
+import { Grid, Box, Typography, Button, Link} from "@mui/material";
+import React, {useState} from "react";
 import ProductList from "./ProductList";
+import RangeSlider from "./common/RangeSlider";
+
+
 
 const ShopPage = () => {
 
-    const [products, setProducts] = useState([])
+    const [currentCategory, setCurrentCategory] = useState(null)
+    const [currentRange, setCurrentRange] = useState([0,1500])
+    const [priceRangeFilter, setPriceRangeFilter] = useState([0, 1500])
+    const handleHeadphonesFilterClick = () => {
+        setCurrentCategory("Headphones")        
+        console.log(currentCategory)
+    }
 
-    useEffect(() => {
-        const fetchProducts = async () =>{
-            setProducts(await getProducts())
-        }
-        fetchProducts()
-    },)
+    const handlePriceFilterClick = () => {
+        setPriceRangeFilter(currentRange)
+    }
+
+    const handleHeadsetsFilterClick = () => {
+        setCurrentCategory("Headsets")
+        console.log(currentCategory)
+    }
+
+    const handleLaptopsFilterClick = () => {
+        setCurrentCategory("Laptops")
+        console.log(currentCategory)
+    }
+
+    const handleWatchesFilterClick = () => {
+        setCurrentCategory("Watches")
+        console.log(currentCategory)
+    }
 
     return(
         <Grid container display={"flex"} direction={"row"} spacing={12} paddingRight={"135px"} paddingLeft={"84px"} >
             <Grid item xs = {4} >
-                <Box display={"flex"} flexDirection={"column"} gap={"16px"} padding={"224px 0px"} >
+                <Box display={"flex"} flexDirection={"column"} gap={"56px"} padding={"224px 0px"} >
+                    <Box display={"flex"} flexDirection={"column"} alignContent={"flex-start"} gap={"12px"}>
                     <Typography variant="item_header">Product Categories</Typography>
-                    <Box display={"flex"} flexDirection={"column"} gap={"12px"}>
-                        <Typography variant="body1" sx={{color:"rgba(0,0,0,0.7)", lineHeight:"140%", paddingLeft:"20px"}}>Headphones</Typography>
-                        <Typography variant="body1" sx={{color:"rgba(0,0,0,0.7)", lineHeight:"140%", paddingLeft:"20px"}}>Headsets</Typography>
-                        <Typography variant="body1" sx={{color:"rgba(0,0,0,0.7)", lineHeight:"140%", paddingLeft:"20px"}}>Laptops</Typography>
-                        <Typography variant="body1" sx={{color:"rgba(0,0,0,0.7)", lineHeight:"140%", paddingLeft:"20px"}}>Watches</Typography>
+                        <Link component={"button"} onClick={handleHeadphonesFilterClick} variant="body1" sx={{color:"rgba(0,0,0,0.7)", lineHeight:"140%", paddingLeft:"20px", display:"flex"}}>Headphones</Link>
+                        <Link component={"button"} onClick={handleHeadsetsFilterClick} variant="body1" sx={{color:"rgba(0,0,0,0.7)", lineHeight:"140%", paddingLeft:"20px", display:"flex"}}>Headsets</Link>
+                        <Link component={"button"} onClick={handleLaptopsFilterClick} variant="body1" sx={{color:"rgba(0,0,0,0.7)", lineHeight:"140%", paddingLeft:"20px", display:"flex"}}>Laptops</Link>
+                        <Link component={"button"} onClick={handleWatchesFilterClick} variant="body1" sx={{color:"rgba(0,0,0,0.7)", lineHeight:"140%", paddingLeft:"20px", display:"flex"}}>Watches</Link>
+                    </Box>
+                    <Box display={"flex"} flexDirection={"column"} gap={"16px"} >
+                        <Typography variant="item_header">Filter by Price</Typography>
+                        <RangeSlider setCurrentRange={setCurrentRange} currentRange={currentRange} />
+                        <Box>
+                            <Button onClick={handlePriceFilterClick} variant="contained">Filter</Button>
+                        </Box>
                     </Box>
                 </Box>
             </Grid>
@@ -32,7 +59,7 @@ const ShopPage = () => {
                 <Grid container item rowGap={7} paddingTop={"112px"} paddingBottom={"112px"}>
                     <Typography variant="product_header">Shop</Typography>
                     <Grid container item rowGap={7} columnGap={4}>
-                        {products.length !==0 ? (<ProductList products={products}/>) :(<Typography>Loading</Typography>)}
+                        <ProductList categoryFilter = {{currentCategory}} priceRangeFilter = {{priceRangeFilter}}/>
                     </Grid>
                 </Grid>
             </Grid>

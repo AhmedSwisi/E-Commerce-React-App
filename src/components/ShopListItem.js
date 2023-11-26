@@ -8,8 +8,10 @@ const ShopListItem = ({product}) => {
     
     useEffect(() =>{
         const fetchImage = async () => {
-            setImageUrl(await getImage(product.picture))
-            console.log(imageUrl)
+            if(imageUrl === ""){
+                setImageUrl(await getImage(product.picture))
+                console.log(imageUrl)
+            }
         }
         fetchImage()
     },)
