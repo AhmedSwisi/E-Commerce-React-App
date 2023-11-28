@@ -1,7 +1,7 @@
 import React, { useEffect,useRef,useState} from "react";
-import { useAuthState, useCreateUserWithEmailAndPassword} from "react-firebase-hooks/auth";
-import { TextField, Button, Grid, InputLabel, Typography, Link, Box, Alert} from "@mui/material";
-import { auth, registerWithEmailAndPassword, getAuthenticationErrorMessage } from "../firebase/firebase"
+import { useCreateUserWithEmailAndPassword, useAuthState} from "react-firebase-hooks/auth";
+import { TextField, Button, Grid, InputLabel, Typography, Box, Alert} from "@mui/material";
+import { auth, getAuthenticationErrorMessage } from "../firebase/firebase"
 import { useNavigate } from "react-router-dom";
 
 
@@ -11,6 +11,13 @@ const SignUpPage = () =>{
         emailMessage:null,
         confirmPasswordMessage:null
     }
+    const [userAuth] = useAuthState(auth)
+    const [
+        createUserWithEmailAndPassword,
+        user,
+        loading,
+        error,
+      ] = useCreateUserWithEmailAndPassword(auth);
     const [timer, setTimer] = useState()
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -23,39 +30,13 @@ const SignUpPage = () =>{
     const [symbolMessage, setSymbolMessage] = useState(null)
     const [lengthMessage, setLengthMessage] = useState(null)
     const [errorMessages, setErrors] = useState(initialErrorMessages)
-    const [successMessage, setSuccessMessage] = useState(null)
-    //const [user, loading, error,] = useAuthState(auth)
-    const [
-        createUserWithEmailAndPassword,
-        user,
-        loading,
-        error,
-      ] = useCreateUserWithEmailAndPassword(auth);
     const textFieldForEmailRef = useRef(null)
     const textFieldForPasswordRef = useRef(null)
     const textFieldForConfirmPasswordRef = useRef(null)
     const navigate = useNavigate()
-
-
-
-    const handleSignUp =  async(e) => {
-        e.preventDefault()  
-        
-        createUserWithEmailAndPassword(email, password)
-        
-        if (user !== undefined) {
-            console.log("lol")
-            setSuccessMessage("welcome!")
-        }
-        // try {
-        //     const user = createUserWithEmailAndPassword(email, password)
-        //     user.then((_) => {  
-        //         console.log("user: ", "123")
-        //     })
-        // }  catch (e) {
-        //     //registerWithEmailAndPassword(name, email, password)    
-        //     setSuccessMessage('yikes')
-        // } 
+    const handleSignUp =  async (e) => {
+        e.preventDefault()
+        await createUserWithEmailAndPassword(email, password)
     }
 
     const isValidEmail = (email) => {
@@ -75,6 +56,8 @@ const SignUpPage = () =>{
         }
     }
 
+    
+
     const isValidName = (name) => {
         if (name === ''){
             setErrors({
@@ -91,8 +74,6 @@ const SignUpPage = () =>{
     }
 
     const isValidPassword = (e) => {
-        console.log(e)
-        console.log(errorMessages)
         const hasWhiteSpace = new RegExp( /^(?=.*\s)/)  
         const includesUpperCase = new RegExp(/[A-Z]/)
         const includesLowerCase = /^(?=.*[a-z])/
@@ -101,13 +82,9 @@ const SignUpPage = () =>{
         const isValidLength = /^.{8,16}$/
 
         if (hasWhiteSpace.test(e)){
-            console.log("has white space")
-            console.log(whiteSpaceMessage)
             setWhiteSpaceMessage("Password must not contain any spaces")
-            console.log(whiteSpaceMessage)
         } else if(!hasWhiteSpace.test(e)){
             setWhiteSpaceMessage(null)
-            console.log(whiteSpaceMessage)
         }
 
         if (!includesUpperCase.test(e)){
@@ -154,37 +131,22 @@ const SignUpPage = () =>{
             })
         }
     }
-
     
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value)
         
     }
-
-    const validateInputs = () => {
-        console.log(errorMessages)
-        isValidEmail(email)
-        console.log(errorMessages)
-        console.log(errorMessages)
-        isValidName(name)
-        console.log(errorMessages)
-    }
   
-
     useEffect(() => {
-        console.log(error)
-        if (loading) return;
-        //if (user) navigate("/")
-    }, [user, loading, navigate])
+        if (userAuth) setTimeout(navigate("/"), 2000)
+    }, [userAuth, loading, navigate])
 
     // const handleSignUp = (e) => {
     //     e.preventDefault()
     //     createUserWithEmailAndPassword(auth, email, password)
     //     .then((userCredentials) => {
-    //         console.log(userCredentials)
     //     }).catch((error) => {
-    //         console.log(error)
     //     })
     // }
 
@@ -279,8 +241,8 @@ const SignUpPage = () =>{
                     <Grid container item direction="column" alignContent="flex-start" spacing={1} justifyContent="center" >
                         <Grid item>
                             <Box paddingLeft={"80px"} gap={"30px"}>
-                                {error && successMessage === null ?(<Alert severity="error">{getAuthenticationErrorMessage(error?.code)}</Alert>) :(null)}
-                                {successMessage !==null ?(<Alert severity="success">{successMessage}</Alert>) :(null) }
+                                {error !==undefined ?(<Alert severity="error">{getAuthenticationErrorMessage(error?.code)}</Alert>) :(null)}
+                                {user !== undefined ? (<Alert severity="success">Logged in Successfully</Alert>) :(null) }
                             </Box>
                         </Grid>
                     </Grid>

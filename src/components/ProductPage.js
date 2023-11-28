@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import { db } from "../firebase/firebase";
-import { getImage, getProductReviews } from "../firebase/utilities";
+import { getImage } from "../firebase/utilities";
 import {  getDoc, doc} from "firebase/firestore";
 import { Grid, Typography, Box, Rating, Button, ToggleButtonGroup, ToggleButton, Divider} from "@mui/material";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ReviewList from "./ReviewList";
 
 
@@ -31,7 +31,7 @@ const ProductPage = () => {
             const docSnap = await getDoc(productRef)
             const doc = docSnap.data()
             setProduct({...doc})
-            //setImageUrl(await getImage(doc.picture))
+            setImageUrl(await getImage(doc.picture))
             setRating(doc.rating)
         }
 

@@ -16,9 +16,11 @@ const LoginPage = () => {
     const handlePasswordReset = () => {
         sendPasswordReset(email)
     } 
+    console.log(auth)
+    console.log(user)
 
     useEffect(() => {
-        //if (user) navigate("/")
+        if (user) navigate("/")
     },[user, navigate])
 
     // const handleSignIn = (e) => {

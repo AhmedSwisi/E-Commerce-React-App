@@ -11,6 +11,7 @@ import { ThemeProvider } from "@mui/material";
 import NotFoundPage from "../components/NotFoundPage";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import Cart from "../components/Cart";
 
 const AppRouter = () => (
     <BrowserRouter>
@@ -24,6 +25,7 @@ const AppRouter = () => (
                 <Route path = "/test" element = {<AuthDetails />}/>
                 <Route exact path = '/product/:id' element ={<ProductPage />}/>
                 <Route path = '/shop' element ={<ShopPage />}/>
+                <Route path = '/cart' element = {<Cart />}/>
                 <Route path = '*' element ={<NotFoundPage />}/>
             </Routes> 
             <Footer />
