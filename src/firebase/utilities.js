@@ -22,3 +22,14 @@ export const getProducts = async (categoryFilter, priceRangeFilter) => {
     return docs
 }
 
+export const getProductReviews = async (productID) => {
+    const q = query(collection(db, "reviews"), where("productID", "==",productID ))
+    const querySnapshot = await getDocs(q)
+    const docs = querySnapshot.docs.map((doc) => ({...doc.data(),id:doc.id }))
+    return docs
+}
+
+export const getUser = async (userID) => {
+    
+}
+

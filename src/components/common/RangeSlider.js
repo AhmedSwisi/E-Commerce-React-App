@@ -1,5 +1,5 @@
-import { Box, Typography, Slider, Button} from "@mui/material";
-import React, {useState} from "react";
+import { Box, Typography, Slider} from "@mui/material";
+import React from "react";
 
 
 const RangeSlider = ({currentRange, setCurrentRange}) => {

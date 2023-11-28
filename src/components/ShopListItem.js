@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { getImage } from "../firebase/utilities";
-import { Box, Card, Typography, Grid } from "@mui/material";
+import { Box, Card, Typography, Grid, Link } from "@mui/material";
 
 const ShopListItem = ({product}) => {
 
@@ -18,6 +18,7 @@ const ShopListItem = ({product}) => {
 
     return(
         <Grid item>
+            <Link href = {`/product/${[product.id]}`}>
             <Card elevation={0}>
                 <Box display={"flex"} justifyContent={"flex-start"} flexDirection={"column"} alignItems={"flex-start"} gap={"24px"} flex={"1 0 0"} sx={{height:"457px"}}>
                     <Box display={"flex"} sx={{height:"300px", width:"250px"} } flexShrink={0} >
@@ -40,6 +41,7 @@ const ShopListItem = ({product}) => {
                     </Box>
                 </Box>
             </Card>
+            </Link>
         </Grid>
     )
 }

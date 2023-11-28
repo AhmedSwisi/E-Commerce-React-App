@@ -22,7 +22,7 @@ const AppRouter = () => (
                 <Route path = "/signup" element = {<SignUpPage />}/>
                 <Route path = "/login" element = {<LoginPage />}/>
                 <Route path = "/test" element = {<AuthDetails />}/>
-                <Route path = '/product' element ={<ProductPage />}/>
+                <Route exact path = '/product/:id' element ={<ProductPage />}/>
                 <Route path = '/shop' element ={<ShopPage />}/>
                 <Route path = '*' element ={<NotFoundPage />}/>
             </Routes> 
