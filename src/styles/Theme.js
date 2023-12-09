@@ -14,6 +14,13 @@ const theme = createTheme({
             fontStyle: 'normal',
             fontWeight: '800',
         },
+        h5:{
+            color:"#1D1D1D",
+            fontFamily:"Roboto",
+            fontSize:"36px",
+            fontStyle:"normal",
+            fontWeight:"700",
+        },
         body3:{
             color:'rgba(32, 31, 31, 0.82)',
             textAlign: 'center',
