@@ -1,19 +1,19 @@
 import { Grid, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReviewListItem from "./ReviewListItem";
 import { getProductReviews } from "../firebase/utilities";
 
 const ReviewList = ({setReviewLength, productID}) => {
     const [reviews, setReviews] = useState([])
 
-    useEffect(() => {
-        const fetchReviews = async () => {
-            setReviews(await getProductReviews(productID))
-            console.log(reviews)
-            setReviewLength(reviews.length)
+    const fetchReviews = async () => {
+        if (reviews.length === 0){
+        setReviews(await getProductReviews(productID))
+        setReviewLength(reviews.length)
         }
-        fetchReviews()
-    },)
+    }
+    
+    fetchReviews()
 
     return(
         <Grid item container>

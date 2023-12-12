@@ -6,7 +6,6 @@ import { Grid, Typography, Box, Rating, Button, ToggleButtonGroup, ToggleButton,
 import { useParams } from "react-router-dom";
 import ReviewList from "./ReviewList";
 
-
 const ProductPage = () => {
     const productID= useParams()
     const [reviewLength, setReviewLength] = useState()
@@ -14,7 +13,6 @@ const ProductPage = () => {
     const [image, setImageUrl] = useState('')
     const [rating, setRating] = useState(null)
     const [selected, setSelected] = useState("description")
-    const productRef = doc(db, "products", productID.id)
 
     const handleToggle = (e, selectedToggle) => {
         if(selectedToggle !== null){
@@ -23,10 +21,8 @@ const ProductPage = () => {
         }
     }
 
-    
-
     useEffect(() => {
-        
+        const productRef = doc(db, "products", productID.id)
         const getProduct = async () =>{ 
             const docSnap = await getDoc(productRef)
             const doc = docSnap.data()
@@ -34,9 +30,8 @@ const ProductPage = () => {
             setImageUrl(await getImage(doc.picture))
             setRating(doc.rating)
         }
-
         getProduct()
-    },)
+    },[productID])
 
     return(
         <Grid container display={"flex"} direction={"column"} flexDirection={"column"} >
@@ -95,6 +90,7 @@ const ProductPage = () => {
                         {selected === "reviews" && (
                             <ReviewList productID = {productID.id} setReviewLength = {setReviewLength} />
                         )}
+                        {/* { selected === "reviews" && (<TestComp/>) } */}
                     </Grid>
                 </Grid>
             </Grid>

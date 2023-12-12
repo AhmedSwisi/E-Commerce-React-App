@@ -7,9 +7,6 @@ import { HeadphonesRounded, ShoppingBagOutlined, PersonOutlineOutlined, Verified
 import SearchBar from "./common/SearchBar";
 import "@fontsource/inter"
 
-
-//const pages = ['Home', "Shop", "Contact Us"]
-
 const NavBar  = () => {
 
     const [user, loading] = useAuthState(auth)
@@ -55,7 +52,7 @@ const NavBar  = () => {
         justifyContent={"center"}
         alignItems={"center"}
         flexShrink={0}> 
-            <Box display={"flex"} gap={"32px"} justifyContent={"center"} alignItems={"center"}  alignSelf={"stretch"}   >
+            <Box sx={{backgroundColor:"black"}} display={"flex"} gap={"32px"} justifyContent={"center"} alignItems={"center"}  alignSelf={"stretch"}>
                 <AppBar position="fixed" elevation={0}>
                     <Toolbar  disableGutters = {true} >
                         <Box display={"flex"} sx={{width:1280}} gap={"32px"} flex={"1 0 0"} justifyContent={"center"} alignItems={"center"} > 

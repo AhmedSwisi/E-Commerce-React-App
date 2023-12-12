@@ -1,35 +1,36 @@
 import React, {useEffect, useState} from "react";
 import Cart from "./Cart";
-import { getCart, getDiscountInfo } from "../firebase/utilities";
+import { getCart, getDiscountInfo} from "../firebase/utilities";
+import { auth } from "../firebase/firebase";
 import { Box, Button, Divider, Grid, TextField, Typography} from "@mui/material";
-import { Discount } from "@mui/icons-material";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const CartPage = () => {
 
+    const [user, loading, error] = useAuthState(auth)
     const [cart, setCart] = useState()
     const [subtotal, setSubtotal] = useState(0)
     const [discount, setDiscount] = useState(0)
     const [discountCode, setDiscountCode] = useState('')
     const [discountData, setDiscountData] = useState()
-    console.log(discountData)
-    console.log(discountCode)
-    console.log(discount)
+
     useEffect(() => {
-        console.log("UE from Cart Page")
+        console.log(user, "this is the user")
         const fetchCart = async () => {
-            const cartData = await getCart("Vy8moSKIklejiuHSxbmp9XW08Gz2")
-            setCart(cartData)
+            if (user !== null){
+                const cartData = await getCart(user.uid)
+                setCart(cartData)
+            }
+            
         }
         const fetchCodeInfo = async () => {
                 setDiscountData(await getDiscountInfo(discountCode))
-                console.log(discountData)
             
             
             }
         fetchCodeInfo()
         fetchCart()
-    }, [discountCode, discountData])
-    console.log(subtotal)
+    }, [discountCode, discountData, user])
 
     const handleDiscountCodeClick = () => {
         

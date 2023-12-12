@@ -1,8 +1,9 @@
 import React, { useEffect,useRef,useState} from "react";
 import { useCreateUserWithEmailAndPassword, useAuthState} from "react-firebase-hooks/auth";
 import { TextField, Button, Grid, InputLabel, Typography, Box, Alert} from "@mui/material";
-import { auth, getAuthenticationErrorMessage } from "../firebase/firebase"
+import { auth, getAuthenticationErrorMessage, db} from "../firebase/firebase"
 import { useNavigate } from "react-router-dom";
+import { addDoc, collection } from "firebase/firestore";
 
 
 const SignUpPage = () =>{
@@ -34,10 +35,20 @@ const SignUpPage = () =>{
     const textFieldForPasswordRef = useRef(null)
     const textFieldForConfirmPasswordRef = useRef(null)
     const navigate = useNavigate()
+
     const handleSignUp =  async (e) => {
         e.preventDefault()
-        await createUserWithEmailAndPassword(email, password)
+        const response = await createUserWithEmailAndPassword(email, password)
+        const userData = response.user
+        console.log(user)
+        await addDoc(collection(db, "users"), {
+            uid: userData.uid,
+            name: name,
+            authProvider:"local",
+            email,
+          })
     }
+    console.log(user)
 
     const isValidEmail = (email) => {
         let re =  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;

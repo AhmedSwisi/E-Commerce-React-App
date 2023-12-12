@@ -1,13 +1,31 @@
-import React, { useEffect } from "react"
+import React, { useState } from "react"
 import { Box, Typography, Divider, Rating, Grid} from "@mui/material"
+import { getUser } from "../firebase/utilities"
+
+const formatDate = (dateTimeStamp) => {
+    const date = new Date(dateTimeStamp)
+    const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const dd = date.getDate()
+    const mm = month[date.getMonth()]
+    const yy = date.getFullYear()
+    return `${dd} ${mm}, ${yy}`
+}
+
+
+
 const ReviewListItem = ({review}) => {
-    useEffect(() => {
-        const fetchUser = async () => {
 
+    const [userName, setUserName] = useState()
+
+    const fetchUser = async () => {
+        if((review !== null || undefined) && userName === undefined){
+            const doc = await getUser(review.userID)
+            setUserName(doc.name)
         }
-    })
+    }
 
-    
+    fetchUser()
+
     return(
     <Grid item display={"flex"} alignSelf={"stretch"} padding={"32px"} direction={"column"} alignItems={"flex-start"} gap={"32px"}
     sx={{backgroundColor:"#ECECEC", borderRadius:"16px", width:"100%"}}>
@@ -17,8 +35,8 @@ const ReviewListItem = ({review}) => {
                     <Box sx={{width:"40px", height:"40px", borderRadius:"100px", backgroundColor:"black"}}>
                     </Box>
                     <Box display={"flex"} flexDirection={"column"} alignItems={"flex-start"} gap={"8px"}>
-                        <Typography variant="description_header">{"User Name"}</Typography>
-                        <Typography variant="appbar_link">{}</Typography>
+                        <Typography variant="description_header">{userName}</Typography>
+                        <Typography variant="appbar_link">{formatDate(review.addedAt.toDate().toDateString())}</Typography>
                     </Box>
                 </Box>
                 <Rating value={review.rating} name="read-only" readOnly />

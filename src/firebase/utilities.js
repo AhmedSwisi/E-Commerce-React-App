@@ -10,6 +10,15 @@ export const getImage = async (location) =>{
     return imageUrl
 }  
 
+export const getUser = async (userID) => {
+    const q = query(collection(db, "users"), where("uid", "==", userID), limit(1))
+    const querySnapshot = await getDocs(q)
+    const docs = querySnapshot.docs.map((doc) => ({...doc.data(),id:doc.id }))
+    const doc = docs[0]
+    console.log(doc)
+    return doc
+}
+
 export const getProducts = async (categoryFilter, priceRangeFilter) => {
     const q = query(collection(db,"products"), where("category", "==", categoryFilter.currentCategory),
     where("price", ">=", priceRangeFilter.priceRangeFilter[0]),
@@ -48,9 +57,5 @@ export const getProductReviews = async (productID) => {
     const querySnapshot = await getDocs(q)
     const docs = querySnapshot.docs.map((doc) => ({...doc.data(),id:doc.id }))
     return docs
-}
-
-export const getUser = async (userID) => {
-    
 }
 
