@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { db } from "../firebase/firebase";
 import { getImage } from "../firebase/utilities";
 import {  getDoc, doc} from "firebase/firestore";
-import { Grid, Typography, Box, Rating, Button, ToggleButtonGroup, ToggleButton, Divider} from "@mui/material";
+import { Grid, Typography, Box, Rating, Button, ToggleButtonGroup, ToggleButton, Divider, TextField} from "@mui/material";
 import { useParams } from "react-router-dom";
 import ReviewList from "./ReviewList";
 
@@ -20,7 +20,7 @@ const ProductPage = () => {
             console.log(selected)
         }
     }
-
+    console.log(reviewLength)
     useEffect(() => {
         const productRef = doc(db, "products", productID.id)
         const getProduct = async () =>{ 
@@ -74,7 +74,7 @@ const ProductPage = () => {
                     onChange={handleToggle}
                     exclusive>
                         <ToggleButton sx={{borderRadius:"8px 0px 0px 8px", padding: "12px 24px"}} value={"description"}>Description</ToggleButton>
-                        <ToggleButton sx={{borderRadius:"0px 8px 8px 0px", padding: "12px 24px"}} value={"reviews"}>{reviewLength === 0 || reviewLength === undefined  
+                        <ToggleButton sx={{borderRadius:"0px 8px 8px 0px", padding: "12px 24px"}} value={"reviews"}>{reviewLength === 0 
                         ?(<Typography>Reviews</Typography>) :(<Typography>Reviews ({reviewLength})</Typography>)}</ToggleButton>
                     </ToggleButtonGroup>
                 </Grid>
@@ -85,12 +85,31 @@ const ProductPage = () => {
                         :(<Typography variant="description_header">Reviews</Typography>)}
                     </Grid>
                         <Divider sx={{width:"100%", height:"1px", color:"black", backgroundColor:"black"} }/>
-                    <Grid item>
-                        {selected === "description" && (<Typography variant="body1">{product.description}</Typography>) }
-                        {selected === "reviews" && (
-                            <ReviewList productID = {productID.id} setReviewLength = {setReviewLength} />
-                        )}
-                        {/* { selected === "reviews" && (<TestComp/>) } */}
+                    <Grid container item justifyContent={"space-between"} gap={"30px"} >
+                        <Grid item md = {6}>
+                            {selected === "description" && (<Typography variant="body1">{product.description}</Typography>) }
+                            {selected === "reviews" && (
+                                <ReviewList productID = {productID.id} setReviewLength = {setReviewLength} />
+                            )}
+                        </Grid>
+                        <Grid item md = {5}>
+                            <Box display={"flex"} flexDirection={"column"} gap={"16px"}>
+                                <Box display={"flex"} flexDirection={"column"} gap={"16px"}>
+                                    <Typography  variant="h3">Add a Review</Typography>
+                                    <Box display={"flex"}  flexDirection={"row"} gap={"10px"}>
+                                        <Typography variant="footer_link">Your Rating: </Typography>
+                                        <Rating  name="read-only" />
+                                    </Box>
+                                </Box>
+                                <Box display={"flex"} flexDirection={"column"} gap={"16px"}>
+                                    <Typography>Your Review: </Typography>
+                                    <TextField multiline></TextField>
+                                    <Box>
+                                    <Button variant="contained">Submit</Button>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>

@@ -22,7 +22,7 @@ const ShopListItem = ({product}) => {
             <Card elevation={0}>
                 <Box display={"flex"} justifyContent={"flex-start"} flexDirection={"column"} alignItems={"flex-start"} gap={"24px"} flex={"1 0 0"} sx={{height:"457px"}}>
                     <Box display={"flex"} sx={{height:"300px", width:"250px"} } flexShrink={0} >
-                        <img style={{width:"100%", height:"100%"}} src={imageUrl} className="picture" alt="loading"></img>
+                        <img style={{width:"100%", height:"100%", objectFit: "cover"}} src={imageUrl} className="picture" alt="loading"></img>
                     </Box>
                     <Box display={"flex"} flexDirection={"column"} gap={"16px"} justifyContent={"flex-start"}>
                         <Box display={"flex"} padding = "8px" sx={{backgroundColor:"#F4F4F4"}} justifyContent={"center"}>

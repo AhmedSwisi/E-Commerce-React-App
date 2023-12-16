@@ -42,9 +42,9 @@ const CartItem = ({product, setSubtotal}) => {
                     <TableCell>
                         <Box display={"flex"} flexDirection={"row"} gap={"56px"} >
                         <Box display={"flex"} flexShrink={0}>
-                        {
+                        
                             <img style={{width:"48px", height:"48px"}} src={imageUrl} className="picture" alt="loading"></img>
-                        }
+                        
                         </Box>
                         <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
                             {productData.productName}

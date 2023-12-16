@@ -20,13 +20,24 @@ export const getUser = async (userID) => {
 }
 
 export const getProducts = async (categoryFilter, priceRangeFilter) => {
-    const q = query(collection(db,"products"), where("category", "==", categoryFilter.currentCategory),
-    where("price", ">=", priceRangeFilter.priceRangeFilter[0]),
-    where("price", "<=", priceRangeFilter.priceRangeFilter[1])
-    )
-    const querySnapshot =  await getDocs(q)
-    const docs = querySnapshot.docs.map((doc) => ({...doc.data(), id:doc.id}))
-    return docs
+    if (categoryFilter.currentCategory === 'default'){
+        console.log("default")
+        const q = query(collection(db,"products"), 
+        where("price", ">=", priceRangeFilter.priceRangeFilter[0]),
+        where("price", "<=", priceRangeFilter.priceRangeFilter[1]))
+        const querySnapshot =  await getDocs(q)
+        const docs = querySnapshot.docs.map((doc) => ({...doc.data(), id:doc.id}))
+        return docs
+    } else{
+        console.log("we are here")
+        const q = query(collection(db,"products"), where("category", "==", categoryFilter.currentCategory),
+        where("price", ">=", priceRangeFilter.priceRangeFilter[0]),
+        where("price", "<=", priceRangeFilter.priceRangeFilter[1])
+        )
+        const querySnapshot =  await getDocs(q)
+        const docs = querySnapshot.docs.map((doc) => ({...doc.data(), id:doc.id}))
+        return docs
+    }
 }
 
 export const getProduct = async (productID) => {

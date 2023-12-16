@@ -27,7 +27,7 @@ const ReviewListItem = ({review}) => {
     fetchUser()
 
     return(
-    <Grid item display={"flex"} alignSelf={"stretch"} padding={"32px"} direction={"column"} alignItems={"flex-start"} gap={"32px"}
+    <Grid item marginBottom={"30px"} md={11}  display={"flex"} alignSelf={"stretch"} padding={"32px"} direction={"column"} alignItems={"flex-start"} gap={"32px"}
     sx={{backgroundColor:"#ECECEC", borderRadius:"16px", width:"100%"}}>
         <Box display={"flex"} padding={"32px"} flexDirection={"column"} alignItems={"flex-start"} gap={"32px"} flex={"1 0 0"} alignSelf={"stretch"}>
             <Box display={"flex"} sx={{height:"34px"}} justifyContent={"space-between"} alignItems={"center"} alignSelf={"stretch"} >

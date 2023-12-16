@@ -1,6 +1,6 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp} from "firebase/app";
 import { GoogleAuthProvider, getAuth, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "firebase/auth";
-import {collection, getFirestore, query, getDocs, where, addDoc} from "firebase/firestore"
+import {collection, query, getDocs, where, addDoc, persistentLocalCache, persistentSingleTabManager, initializeFirestore} from "firebase/firestore"
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDgDr_0lfmYcL80lAlUIEG7QwrSIF8yItA",
@@ -15,8 +15,12 @@ export const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+
 //Initialize Firestore DB
-export const db = getFirestore(app);
+export const db = initializeFirestore(app, 
+  {localCache: 
+    persistentLocalCache(/*settings*/{tabManager: persistentSingleTabManager()})
+});
 
 //Intialize Authentication
 export const auth = getAuth(app)

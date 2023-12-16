@@ -1,5 +1,5 @@
 
-import { Grid, Box, Typography, Button, Link} from "@mui/material";
+import { Grid, Box, Typography, Button, Link, List} from "@mui/material";
 import React, {useState} from "react";
 import ProductList from "./ProductList";
 import RangeSlider from "./common/RangeSlider";
@@ -7,8 +7,8 @@ import RangeSlider from "./common/RangeSlider";
 
 
 const ShopPage = () => {
-
-    const [currentCategory, setCurrentCategory] = useState(null)
+    console.log("calling shop page")
+    const [currentCategory, setCurrentCategory] = useState("default")
     const [currentRange, setCurrentRange] = useState([0,1500])
     const [priceRangeFilter, setPriceRangeFilter] = useState([0, 1500])
     const handleHeadphonesFilterClick = () => {
@@ -56,11 +56,19 @@ const ShopPage = () => {
                 </Box>
             </Grid>
             <Grid item xs = {8} >
-                <Grid container item rowGap={7} paddingTop={"112px"} paddingBottom={"112px"}>
+                <Grid container item rowGap={7} >
                     <Typography variant="product_header">Shop</Typography>
-                    <Grid container item rowGap={7} columnGap={4}>
+                    <List
+                    sx={{
+                        width: '100%',
+                        position: 'relative',
+                        overflow: 'auto',
+                        maxHeight: 1000,
+                    }}>
+                    <Grid container item rowGap={7} columnGap={4} >
                         <ProductList categoryFilter = {{currentCategory}} priceRangeFilter = {{priceRangeFilter}}/>
                     </Grid>
+                    </List>
                 </Grid>
             </Grid>
         </Grid>

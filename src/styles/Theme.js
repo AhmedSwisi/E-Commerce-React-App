@@ -200,6 +200,28 @@ const theme = createTheme({
                 }
             }
         },
+        MuiList: {
+            styleOverrides:{
+                root:{
+                    '& ul': { padding: 0 },
+                    '&::-webkit-scrollbar': {
+                        width: '0.4em'
+                      },
+                      '&::-webkit-scrollbar-track': {
+                        borderLeft:"1.5px",
+                        boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+                        webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
+                      },
+                      '&::-webkit-scrollbar-thumb': {
+                        width:"0.2em",
+                        backgroundClip: "padding-box",
+                        backgroundColor: 'black',
+                        borderRadius:"5px",
+                        outline: 'black'
+                      }
+                }
+            }
+        },
         MuiAppBar: {
             styleOverrides: {
                 
