@@ -1,20 +1,24 @@
 import { Box, Grid, Typography, Button, List } from "@mui/material";
-import React, {useEffect, useState} from "react";
-import { getImage, getProducts } from "../firebase/utilities";
+import React, {useEffect, useState, } from "react";
+import { getImage} from "../firebase/utilities";
+import { useNavigate } from "react-router-dom";
 import ProductList from "./ProductList";
 
 const Home = () =>{
-    const [products, setProducts] = useState([])
     const [headerImage, setHeaderImageUrl] = useState()
     const [headphonesImage, setHeadphonesImageUrl] = useState()
     const [watchImage, setWatchImageUrl] = useState()
     const [laptopImage, setLaptopImageUrl] = useState()
     const [saleImage, setSaleImageUrl] = useState()
-    const [currentCategory, setCurrentCategory] = useState("default")
-    const [currentRange, setCurrentRange] = useState([0,1500])
-    const [priceRangeFilter, setPriceRangeFilter] = useState([0, 1500])
+    const [currentCategory] = useState("default")
+    const [priceRangeFilter] = useState([0, 1500])
+    const navigate = useNavigate()
 
     console.log("calling Home page")
+
+    const handleShopButtonClick = () => {
+        navigate("/shop")
+    }
 
     useEffect(() =>{
         const fetchData = async () => {
@@ -47,7 +51,7 @@ const Home = () =>{
                             </Typography>
                         </Box>
                         <Box display={"flex"} alignContent={"center"}>
-                            <Button variant="contained">Visit Our Shop</Button>
+                            <Button onClick={handleShopButtonClick} variant="contained">Visit Our Shop</Button>
                         </Box>
                     </Box>
                 </Grid>
@@ -73,7 +77,7 @@ const Home = () =>{
                                 <Typography variant="card_header" >Headphones</Typography>
                             </Box>
                             <Box paddingLeft={"24px"} >
-                                <Button sx={{color:"black",backgroundColor:"white"}} variant="contained">Browse</Button>
+                                <Button onClick={handleShopButtonClick}  color="secondary" variant="contained">Browse</Button>
                             </Box>
                         </Grid>
                         <Grid item display={"flex"} xs = {2} flexDirection={"column"} justifyContent={"center"} alignItems={"flex-start"} gap={"24px"} flexShrink={0}
@@ -92,7 +96,7 @@ const Home = () =>{
                                 <Typography variant="card_header" >Watches</Typography>
                             </Box>
                             <Box paddingLeft={"24px"} >
-                                <Button sx={{color:"black",backgroundColor:"white"}} variant="contained">Browse</Button>
+                                <Button onClick={handleShopButtonClick} color="secondary" variant="contained">Browse</Button>
                             </Box>
                         </Grid>
                         <Grid item display={"flex"} xs = {7} flexDirection={"column"} justifyContent={"center"} alignItems={"flex-start"} gap={"24px"} flexShrink={0}
@@ -111,7 +115,7 @@ const Home = () =>{
                                 <Typography variant="card_header" >Laptops</Typography>
                             </Box>
                             <Box paddingLeft={"24px"} >
-                                <Button sx={{color:"black",backgroundColor:"white"}} variant="contained">Browse</Button>
+                                <Button onClick={handleShopButtonClick} color="secondary" variant="contained">Browse</Button>
                             </Box>
                         </Grid>
                     </Grid>
@@ -132,7 +136,7 @@ const Home = () =>{
                                 <Typography variant="card_header" >Headphones</Typography>
                             </Box>
                             <Box paddingLeft={"24px"} >
-                                <Button sx={{color:"black",backgroundColor:"white"}} variant="contained">Browse</Button>
+                                <Button onClick={handleShopButtonClick} color="secondary" variant="contained">Browse</Button>
                             </Box>
                         </Grid>
                         <Grid item display={"flex"} xs = {7} flexDirection={"column"} justifyContent={"center"} alignItems={"flex-start"} gap={"24px"} flexShrink={0}
@@ -151,7 +155,7 @@ const Home = () =>{
                                 <Typography variant="card_header" >Laptops</Typography>
                             </Box>
                             <Box paddingLeft={"24px"} >
-                                <Button sx={{color:"black",backgroundColor:"white"}} variant="contained">Browse</Button>
+                                <Button onClick={handleShopButtonClick} color="secondary" variant="contained">Browse</Button>
                             </Box>
                         </Grid>
                         <Grid item display={"flex"} xs = {2} flexDirection={"column"} justifyContent={"center"} alignItems={"flex-start"} gap={"24px"} flexShrink={0}
@@ -170,7 +174,7 @@ const Home = () =>{
                                 <Typography variant="card_header" >Watches</Typography>
                             </Box>
                             <Box paddingLeft={"24px"} >
-                                <Button sx={{color:"black",backgroundColor:"white"}} variant="contained">Browse</Button>
+                                <Button onClick={handleShopButtonClick} color="secondary" variant="contained">Browse</Button>
                             </Box>
                         </Grid>
                     </Grid>
@@ -222,45 +226,11 @@ const Home = () =>{
                         </Box>
                         <Typography variant="body3" color={"white"}>Check out our shop for a lot of products on sale now</Typography>
                         <Box>
-                            <Button sx={{color:"black",backgroundColor:"white"}} variant="contained">Browse</Button>
+                            <Button onClick={handleShopButtonClick} color="secondary" variant="contained">Browse</Button>
                         </Box>
                     </Box>
                     </Grid>
                 </Grid>
-                
-            {/* <Grid item>
-                <Box display={"flex"} flexDirection={"row"} justifyContent={"center"} alignItems={"flex-end"} gap={"24px"} padding={"112px 80px"} flexShrink={0}
-                            sx={{
-                                    backgroundImage:`url(${saleImage})`,
-                                    backgroundColor:"#36B27E",
-                                    backgroundRepeat:"no-repeat",
-                                    backgroundSize:"contain",
-                                    backgroundPosition:"center left",
-                                    height:"500px",
-                                    width:"1280px",
-                                    borderRadius:"16px",
-                                }}>
-                    <Box sx={{height:"204px", width:"608px"}}>
-                        <Typography sx={{
-                            color:"white",
-                            fontFamily:"Roboto",
-                            fontSize:"188px",
-                            fontStyle:"normal",
-                            fontWeight:"700",
-                            lineHeight:"120%"
-                        }}>SALE!</Typography>
-                    </Box>
-                    <Box display={"flex"} flexDirection={"column"} justifyContent={"center"} alignItems={"flex-start"} flex={"1 0 0"} gap={"24px"}>
-                        <Box sx={{width:"325px"}}>
-                        <Typography variant="product_header" color={"white"}>Product on sale now!</Typography>
-                        </Box>
-                        <Typography variant="body3" color={"white"}>Check out our shop for a lot of products on sale now</Typography>
-                        <Box>
-                            <Button sx={{color:"black",backgroundColor:"white"}} variant="contained">Browse</Button>
-                        </Box>
-                    </Box>
-                </Box>
-            </Grid> */}
         </Grid>
     )
 }

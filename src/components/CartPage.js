@@ -8,17 +8,19 @@ import { useAuthState } from "react-firebase-hooks/auth";
 const CartPage = () => {
 
     const [user, loading, error] = useAuthState(auth)
-    const [cart, setCart] = useState()
+    const [cart, setCart] = useState(undefined)
     const [subtotal, setSubtotal] = useState(0)
     const [discount, setDiscount] = useState(0)
     const [discountCode, setDiscountCode] = useState('')
     const [discountData, setDiscountData] = useState()
 
+    console.log(cart)
     useEffect(() => {
         console.log(user, "this is the user")
         const fetchCart = async () => {
-            if (user !== null){
+            if (user !== null && cart === undefined){
                 const cartData = await getCart(user.uid)
+                console.log(cart, "Use effect")
                 setCart(cartData)
             }
             
@@ -30,7 +32,7 @@ const CartPage = () => {
             }
         fetchCodeInfo()
         fetchCart()
-    }, [discountCode, discountData, user])
+    }, [cart, discountCode, discountData, user])
 
     const handleDiscountCodeClick = () => {
         
@@ -49,7 +51,7 @@ const CartPage = () => {
     return(
         <Grid container display={"flex"} direction={"column"} width={"auto"} paddingLeft={"50px"} paddingRight={"50px"}  paddingTop={"112px"} paddingBottom={"112px"} gap={"54px"}>
             <Grid item>
-                <Cart cart={cart} setSubtotal = {setSubtotal} />
+                <Cart cart={cart} setSubtotal = {setSubtotal} setCart={setCart} />
             </Grid>
             <Grid item container display={"flex"} alignItems={"flex-end"} justifyContent={"flex-end"} gap={"24px"}>
                 <Grid item>
@@ -104,6 +106,7 @@ const CartPage = () => {
                         <Box display={"flex"} flexDirection={"column"} gap={"14px"}>
                             <Box flexShrink={0} display={"flex"} flexDirection={"row"}  sx={{width:"500px", justifyContent:"space-between"}}>
                                 <Typography>Discount</Typography>
+                                {discount === 0 && (<Typography>-${discount}</Typography>)}
                                 {discountData?.discountType === "Set Value" && 
                                 (<Typography>-${discount}</Typography>)}
                                 {discountData?.discountType === "Percentage" && 

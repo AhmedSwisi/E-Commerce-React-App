@@ -1,33 +1,67 @@
-import { TableCell, TableRow, Box } from "@mui/material";
+import { TableCell, TableRow, Box, IconButton, ButtonGroup, Button} from "@mui/material";
+import { Clear } from "@mui/icons-material";
+import { useAuthState } from "react-firebase-hooks/auth";
 import React, {useEffect, useState} from "react";
-import { getProduct, getImage } from "../firebase/utilities";
+import { getCartProduct, getImage, setProductQuantity, deleteProductFromCart } from "../firebase/utilities";
+import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
+import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
+import { auth } from "../firebase/firebase";
 
-const CartItem = ({product, setSubtotal}) => {
-    
+const CartItem = ({product, setSubtotal, cart, setCart}) => {
+    const [user] = useAuthState(auth)
     const [imageUrl, setImageUrl] = useState('')
     const[productData, setProductData] = useState()
+    const[quantity, setQuantity] = useState(cart[`${product}`])
+    const [itemTotalPrice, setItemTotalPrice] = useState()
+
+    console.log(product)
+    console.log(productData)
+    const onIncrementButtonClick = () => {
+        setProductQuantity(user.uid,product, quantity + 1)
+        const temp = quantity + 1
+        setQuantity(temp)
+        setItemTotalPrice(productData.price * temp)
+        setSubtotal((subTotal) => subTotal +productData.price)
+    }
+
+    const onDecrementButtonClick = () => {
+        setProductQuantity(user.uid,product, quantity - 1)
+        const temp = quantity - 1
+        setQuantity(temp)
+        setItemTotalPrice(productData.price * temp)
+        setSubtotal((subTotal) => subTotal - productData.price)
+    }
+
+    const onClearButtonClick = () => {
+        deleteProductFromCart(user.uid, product)
+        delete cart[`${product}`]
+        setCart(cart)
+        product = undefined 
+        setProductData(null)
+        console.log(productData)
+        console.log(product)
+        setImageUrl(null)
+        setQuantity(null)
+        setSubtotal((subTotal) => subTotal - (productData.price * quantity))
+    }
 
     useEffect(() =>{
-        console.log("calling use Effect 1")
         const fetchProduct = async () => {
-            console.log("calling fetch Products 1")
             if (productData === undefined){
-                console.log("calling fetch Products isnide data conditional")
-                setProductData(await getProduct(product.productID))
+                setProductData(await getCartProduct(product))
                 
             }
 
             if(imageUrl === "" && productData !==undefined){
-                console.log("calling fetch products inside conditional for image")
                 setImageUrl(await getImage(productData?.picture))
-                console.log("setting subtotal")
-                setSubtotal(subTotal => subTotal + productData.price * product.quantity )
+                setItemTotalPrice(productData.price * cart[`${product}`])
+                setSubtotal(subTotal => subTotal + productData.price * quantity )
             }
         }
         
         
         fetchProduct()
-    },[imageUrl, product.productID, product.quantity, productData, setSubtotal])
+    },[cart, imageUrl, product, productData, quantity, setSubtotal])
     
 
     
@@ -36,24 +70,37 @@ const CartItem = ({product, setSubtotal}) => {
     return(
         
         <TableRow>
-            {productData !== undefined
+            {productData !== undefined && productData !==null
             ?(
                 <>
                     <TableCell>
-                        <Box display={"flex"} flexDirection={"row"} gap={"56px"} >
-                        <Box display={"flex"} flexShrink={0}>
                         
-                            <img style={{width:"48px", height:"48px"}} src={imageUrl} className="picture" alt="loading"></img>
+                        <Box display={"flex"} flexDirection={"row"} gap={"56px"} alignItems={"center"} >
+                        <IconButton onClick={onClearButtonClick} color="primary">
+                            <Clear />
+                        </IconButton>
                         
-                        </Box>
-                        <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
-                            {productData.productName}
-                        </Box>
+                            <Box display={"flex"} flexShrink={0}>
+                            
+                                <img style={{width:"48px", height:"48px"}} src={imageUrl} className="picture" alt="loading"></img>
+                            
+                            </Box>
+                            <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                                {productData?.productName}
+                            </Box>
                         </Box>
                     </TableCell>
-                    <TableCell>${productData.price}</TableCell>
-                    <TableCell>{product.quantity}</TableCell>
-                    <TableCell>${productData.price * product.quantity}</TableCell>
+                    <TableCell>${productData?.price}</TableCell>
+                    <TableCell>
+                        <Box display={"flex"}  alignItems={"center"} gap={"16px"} >
+                        {quantity}
+                        <ButtonGroup orientation="vertical">
+                            <IconButton variant="outlined" sx={{borderColor:"gray"}} color="primary" disableElevation = {true} onClick={onIncrementButtonClick}><KeyboardArrowUpOutlinedIcon /></IconButton>
+                            <IconButton variant="outlined"  color="primary" onClick={onDecrementButtonClick} disableElevation = {true}><KeyboardArrowDownOutlinedIcon /></IconButton>
+                        </ButtonGroup>
+                        </Box>
+                    </TableCell>
+                    <TableCell>${itemTotalPrice}</TableCell>
                 </>
             ) 
             :(null)} 

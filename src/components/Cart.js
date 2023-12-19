@@ -2,13 +2,16 @@ import { Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Typog
 import CartItem from "./CartItem";
 import React, {useEffect, useState} from "react";
 
-const Cart = ({cart, setSubtotal}) => {
+const Cart = ({cart,setCart, setSubtotal}) => {
 
     const [products, setProducts] = useState([])
 
+    console.log(cart)
+
     useEffect(() => {
         if(cart){
-            setProducts(cart.products)
+            console.log(Object.getOwnPropertyNames(cart), "object names")
+            setProducts(Object.getOwnPropertyNames(cart))
         }
     },[cart])
 
@@ -42,7 +45,7 @@ const Cart = ({cart, setSubtotal}) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                {products !== undefined || null ?(<>{products.map((product) => <CartItem product = {product} setSubtotal={setSubtotal} />)} </>):(null)}
+                {products !== undefined || null ?(<>{products.map((product) => <CartItem product = {product} cart={cart} setSubtotal={setSubtotal} setCart = {setCart} />)} </>):(null)}
                 
                 
                 </TableBody>

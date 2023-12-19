@@ -1,26 +1,46 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import { db } from "../firebase/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { getImage } from "../firebase/utilities";
 import {  getDoc, doc} from "firebase/firestore";
 import { Grid, Typography, Box, Rating, Button, ToggleButtonGroup, ToggleButton, Divider, TextField} from "@mui/material";
 import { useParams } from "react-router-dom";
 import ReviewList from "./ReviewList";
+import { auth } from "../firebase/firebase";
+import { addReview, setProductAverageRating} from "../firebase/utilities";
 
 const ProductPage = () => {
+    
+    const [user] = useAuthState(auth)
+    const [review, setReview] = useState("")
     const productID= useParams()
     const [reviewLength, setReviewLength] = useState()
     const [product, setProduct] = useState({})
     const [image, setImageUrl] = useState('')
-    const [rating, setRating] = useState(null)
+    const [rating, setRating] = useState(0)
+    const [productRating, setProductRating] = useState(0)
     const [selected, setSelected] = useState("description")
+    const reviewFieldRef = useRef(null)
 
+    console.log(productRating)
+
+
+    const onSubmitReviewButton = () => {
+        const userID = user.uid
+        addReview(rating, review, userID, productID.id)
+        setRating(0)
+        setReview("")
+        setProductAverageRating(productID.id)
+        document.getElementById("reviewfield").value = ""
+
+    }
+    
     const handleToggle = (e, selectedToggle) => {
         if(selectedToggle !== null){
             setSelected(selectedToggle)
             console.log(selected)
         }
     }
-    console.log(reviewLength)
     useEffect(() => {
         const productRef = doc(db, "products", productID.id)
         const getProduct = async () =>{ 
@@ -28,7 +48,8 @@ const ProductPage = () => {
             const doc = docSnap.data()
             setProduct({...doc})
             setImageUrl(await getImage(doc.picture))
-            setRating(doc.rating)
+            console.log(doc.rating)
+            setProductRating(await doc.rating)
         }
         getProduct()
     },[productID])
@@ -55,7 +76,7 @@ const ProductPage = () => {
                         <Box display={"flex"} flexDirection={"column"} justifyContent={"flex-start"} alignContent={"stretch"} gap={"24px"}>
                             <Typography variant="product_header">{product.productName}</Typography>
                             <Typography variant="price_text">${product.price}</Typography>
-                            <Rating value={rating} name="read-only" readOnly />
+                            <Rating value={productRating} name="read-only" readOnly />
                             <Typography variant="body3" width={"674px"}>{product.description}</Typography>
                         </Box>
                         <Typography variant="body1" sx={{fontWeight:"700"}} padding={"12px"}>In Stock: {product.stock}</Typography>
@@ -74,7 +95,7 @@ const ProductPage = () => {
                     onChange={handleToggle}
                     exclusive>
                         <ToggleButton sx={{borderRadius:"8px 0px 0px 8px", padding: "12px 24px"}} value={"description"}>Description</ToggleButton>
-                        <ToggleButton sx={{borderRadius:"0px 8px 8px 0px", padding: "12px 24px"}} value={"reviews"}>{reviewLength === 0 
+                        <ToggleButton sx={{borderRadius:"0px 8px 8px 0px", padding: "12px 24px"}} value={"reviews"}>{reviewLength === 0 || reviewLength === undefined
                         ?(<Typography>Reviews</Typography>) :(<Typography>Reviews ({reviewLength})</Typography>)}</ToggleButton>
                     </ToggleButtonGroup>
                 </Grid>
@@ -98,14 +119,17 @@ const ProductPage = () => {
                                     <Typography  variant="h3">Add a Review</Typography>
                                     <Box display={"flex"}  flexDirection={"row"} gap={"10px"}>
                                         <Typography variant="footer_link">Your Rating: </Typography>
-                                        <Rating  name="read-only" />
+                                        <Rating value={rating} onChange={e => setRating(e.target.value)} />
                                     </Box>
                                 </Box>
                                 <Box display={"flex"} flexDirection={"column"} gap={"16px"}>
                                     <Typography>Your Review: </Typography>
-                                    <TextField multiline></TextField>
+                                    <TextField inputRef={reviewFieldRef} id="reviewfield" onChange={e => setReview(e.target.value)} multiline 
+                                        inputProps={{
+                                            maxLength: 500,
+                                        }}></TextField>
                                     <Box>
-                                    <Button variant="contained">Submit</Button>
+                                        <Button variant="contained"  onClick={onSubmitReviewButton}>Submit</Button>
                                     </Box>
                                 </Box>
                             </Box>
