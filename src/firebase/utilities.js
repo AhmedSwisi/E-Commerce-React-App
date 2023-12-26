@@ -1,6 +1,6 @@
 import { db } from "../firebase/firebase";
 import { getDownloadURL, getStorage, ref} from "firebase/storage";
-import {collection, getDocs, getDoc, query, where, doc, limit, serverTimestamp, addDoc, setDoc, updateDoc, documentId, deleteField} from "firebase/firestore";
+import {collection, getDocs, getDoc, query, where, doc, limit, serverTimestamp, addDoc, setDoc, updateDoc, documentId, deleteField, arrayUnion} from "firebase/firestore";
 
 
 const storage = getStorage();
@@ -75,6 +75,71 @@ export const getCartProduct = async (productID) => {
     return doc
 }
 
+export const getAddress = async (userID) => {
+    const docRef = doc(db, "addresses", userID)
+    try {
+        const docSnap = await getDoc(docRef);
+        if(docSnap.exists()) {
+            console.log(docSnap.data())
+            return docSnap.data()
+        } else {
+            console.log("Document does not exist")
+        }
+    
+    } catch(error) {
+        console.log(error)
+    }
+}
+
+export const getAddresses = async (userID) => {
+    const docRef = doc(db, "addresses", userID)
+    try {
+        const docSnap = await getDoc(docRef)
+        if(docSnap.exists()) {
+            console.log(docSnap.data())
+            return docSnap.data()
+        } else {
+            console.log("Document does not exist")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const addAddress = async (userID, address, number) => {
+    const docRef = doc(db, "addresses", userID)
+    try {
+        const docSnap = await getDoc(docRef)
+        console.log(docSnap)
+        if(docSnap.exists()){
+            const userData = await getUser(userID)
+            const name = userData.name
+            await updateDoc(doc(db,"addresses",userID), {
+                addresses: arrayUnion({
+                    name,
+                    address,
+                    number
+                })
+            })
+        }
+        else if(!docSnap.exists()){
+            console.log("do we get here")
+            const userData = await getUser(userID)
+            const name = userData.name
+            await setDoc(doc(db, "addresses", userID),{
+                addresses: [{
+                    name,
+                    address,
+                    number,
+                }
+                ]
+            })
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const addReview = async (rating, review, userID, productID) => {
     parseInt(rating)
     await addDoc(collection(db,"reviews"),{
@@ -85,6 +150,8 @@ export const addReview = async (rating, review, userID, productID) => {
         userID
     })
 }
+
+
 
 export const setProductQuantity = async (userID, productID, quantity) => {
     const cartRef = doc(db, "carts",userID)
